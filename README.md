@@ -1,4 +1,4 @@
-# aoc-rust-2025
+# Advent of Code
 
 ## Getting started
 
