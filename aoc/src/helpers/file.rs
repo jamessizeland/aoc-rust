@@ -23,7 +23,7 @@ impl Input {
             .split("_day")
             .collect_tuple()
             .expect("puzzle input name should be YYYY_dayDD");
-        let input_path = format!("input/{year}/day{day}/input.aoc");
+        let input_path = format!("puzzles/input/{year}/day{day}/input.aoc");
         let text = std::fs::read_to_string(&input_path)
             .expect("file should be a string")
             .trim()

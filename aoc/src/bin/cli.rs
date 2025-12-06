@@ -27,8 +27,8 @@ fn main() -> Result<()> {
     println!("-> Running tests for {bin_name} (Part A)");
     #[rustfmt::skip]
     let test_a_status = Command::new("cargo")
-        .args(["test", "--bin", &bin_name, "--features", "a", "--",
-            "--nocapture", "test_part_a"]).status()?;
+        .args(["test", "--bin", &bin_name, "--no-default-features", "--features", "a", 
+            "--", "--nocapture", "test_part_a"]).status()?;
 
     if !test_a_status.success() {
         println!("🥶🥶🥶");
@@ -40,21 +40,23 @@ fn main() -> Result<()> {
     println!("-> Part A tests passed!");
     #[rustfmt::skip]
     let test_b_status = Command::new("cargo")
-        .args(["test", "--bin", &bin_name, "--features", "b", "--",
-            "--nocapture", "test_part_b"]).status()?;
+        .args(["test", "--bin", &bin_name, "--no-default-features", "--features", "b", 
+        "--", "--nocapture", "test_part_b"]).status()?;
 
     if test_b_status.success() {
         println!("✅✅✅");
         println!("-> Part B tests passed!)");
         println!("-> Running main for {bin_name} (Part B)");
+        #[rustfmt::skip]
         Command::new("cargo")
-            .args(["run", "--bin", &bin_name, "--features", "b"])
+            .args(["run", "--bin", &bin_name, "--no-default-features", "--features", "b"])
             .status()?;
     } else {
         println!("🤔🤔🤔");
         println!("-> Running main for {bin_name} (Part A)");
+        #[rustfmt::skip]
         Command::new("cargo")
-            .args(["run", "--bin", &bin_name, "--features", "a"])
+            .args(["run", "--bin", &bin_name, "--no-default-features", "--features", "a"])
             .status()?;
     }
 
@@ -123,7 +125,9 @@ mod template {
             let part_b_test = puzzle_test_template("b");
             let code = prettyplease::unparse(&syn::parse2(quote! {
                 use aoc::prelude::*;
+                #[allow(unused)]
                 #part_a_fn
+                #[allow(unused)]
                 #part_b_fn
                 fn main() {
                     let input = Input::from_puzzle();
