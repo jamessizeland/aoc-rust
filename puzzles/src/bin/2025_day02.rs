@@ -26,10 +26,6 @@ fn part_a(input: &Input) -> Result<usize> {
     for range in ranges {
         for id in range {
             let digits = id.to_string().chars().collect_vec();
-            if digits.first().is_some_and(|c| c == &'0') {
-                output += id;
-                break;
-            }
             let (first, second) = digits.split_at(digits.len() / 2);
             if first == second {
                 output += id;
@@ -47,17 +43,24 @@ fn part_b(input: &Input) -> Result<usize> {
     for range in ranges {
         for id in range {
             let digits = id.to_string().chars().collect_vec();
-            if digits.first().is_some_and(|c| c == &'0') {
-                output += id;
-                break;
-            }
-            // we need to check each digit against its next neighbour until it is a pattern
-            // or we hit the end.
-
-            for digit in &digits {
-                if let Some(check) = digits.get(pattern.len()..pattern.len() * 2) {
-                    println!("checking against next {} digits: '{check:?}'", check.len());
-                    if pattern == check.as_ref() {}
+            // we need to accumulate a pattern from the start until we hit halfway.
+            // then segment the rest of the digits into equal parts
+            // if it fits equally, we then check if all parts are equal.
+            for index in (0..(digits.len() / 2)) {
+                let (pattern, rest) = digits.split_at(index + 1);
+                // println!("{pattern:?} <-> {rest:?} | {id}");
+                let mut valid = false;
+                for chunk in rest.chunks(pattern.len()) {
+                    if chunk != pattern {
+                        valid = true;
+                        break; // break early, this does not indicate a bad id.
+                    }
+                }
+                if !valid {
+                    // if we get here, all chunks match and we have a repeating pattern.
+                    // println!("found a repeating ID: {id}");
+                    output += id;
+                    break;
                 }
             }
         }
@@ -85,7 +88,6 @@ mod test {
     fn test_part_b() {
         let input = Input::from_literal(INPUT);
         let result = part_b(&input).unwrap();
-        assert_eq!(result, 0);
-        todo!("set up test");
+        assert_eq!(result, 4174379265);
     }
 }

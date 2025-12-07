@@ -41,8 +41,6 @@ Adding up all the invalid IDs in this example produces `*1227775554*`.
 
 Your puzzle answer was `30323879646`.
 
-The first half of this puzzle is complete! It provides one gold star: \*
-
 \--- Part Two ---
 ----------
 
@@ -68,8 +66,12 @@ Adding up all the invalid IDs in this example produces `*4174379265*`.
 
 *What do you get if you add up all of the invalid IDs using these new rules?*
 
-Answer:
+Your puzzle answer was `43872163557`.
 
-Although it hasn't changed, you can still [get your puzzle input](2/input).
+Both parts of this puzzle are complete! They provide two gold stars: \*\*
 
-You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+Part+One+of+%22Gift+Shop%22+%2D+Day+2+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F2) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Gift+Shop%22+%2D+Day+2+%2D+Advent+of+Code+2025&url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F2&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.
+At this point, you should [return to your Advent calendar](/2025) and try another puzzle.
+
+If you still want to see it, you can [get your puzzle input](2/input).
+
+You can also [Shareon [Bluesky](https://bsky.app/intent/compose?text=I%27ve+completed+%22Gift+Shop%22+%2D+Day+2+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F2) [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+%22Gift+Shop%22+%2D+Day+2+%2D+Advent+of+Code+2025&url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F2&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)] this puzzle.
