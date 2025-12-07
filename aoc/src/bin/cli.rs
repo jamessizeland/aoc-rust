@@ -157,8 +157,10 @@ mod template {
         let fn_name: proc_macro2::TokenStream = format!("part_{part}").parse().unwrap();
         quote! {
             fn #fn_name(input: &Input) -> Result<usize> {
-                let lines = input.lines().collect_vec();
-                let output = lines.len();
+                let mut output = 0;
+                for line in input.lines() {
+                    println!("{}", line);
+                }
                 Ok(output)
             }
         }
