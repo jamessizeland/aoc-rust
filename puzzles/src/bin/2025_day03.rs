@@ -1,26 +1,10 @@
 use aoc::prelude::*;
 
-fn colour_indexes(input: &str, indexes: &[usize]) {
-    let chars = input.chars().collect_vec();
-    for (idx, ch) in chars.iter().enumerate() {
-        let s = ch.to_string();
-        if indexes.contains(&idx) {
-            print!("{}", s.red());
-        } else {
-            print!("{}", s.green());
-        }
-    }
-}
-fn combine_nums(nums: &(u32, u32)) -> Result<usize> {
-    Ok(format!("{}{}", nums.0, nums.1).parse()?)
-}
-
 #[allow(unused)]
 fn part_a(input: &Input) -> Result<usize> {
     let mut output = 0;
-    let lines = input.lines().collect_vec();
-    for line in lines {
-        let digits = line.chars().map(|c| c.to_digit(10).unwrap()).collect_vec();
+    for line in input.lines() {
+        let digits = line.digits();
         let mut largest_joltage = 0;
         let mut refs = (0, 0);
         'outer: for pos in 0..(digits.len() - 1) {
@@ -34,14 +18,16 @@ fn part_a(input: &Input) -> Result<usize> {
                     new_refs.1 = pos;
                 }
             }
-            let new_joltage = combine_nums(&largest)?;
+            let new_joltage = largest.combine()?;
             if new_joltage >= largest_joltage {
                 largest_joltage = new_joltage;
                 refs = new_refs;
             }
         }
-        colour_indexes(line, &[refs.0, refs.1]);
-        println!(" -> {largest_joltage}");
+        println!(
+            "{} -> {largest_joltage}",
+            line.colour_by_index(&[refs.0, refs.1])
+        );
         output += largest_joltage;
     }
 
