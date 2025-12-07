@@ -43,22 +43,11 @@ fn part_b(input: &Input) -> Result<usize> {
     for range in ranges {
         for id in range {
             let digits = id.to_string().chars().collect_vec();
-            // we need to accumulate a pattern from the start until we hit halfway.
-            // then segment the rest of the digits into equal parts
-            // if it fits equally, we then check if all parts are equal.
-            for index in (0..(digits.len() / 2)) {
-                let (pattern, rest) = digits.split_at(index + 1);
-                // println!("{pattern:?} <-> {rest:?} | {id}");
-                let mut valid = false;
-                for chunk in rest.chunks(pattern.len()) {
-                    if chunk != pattern {
-                        valid = true;
-                        break; // break early, this does not indicate a bad id.
-                    }
-                }
-                if !valid {
-                    // if we get here, all chunks match and we have a repeating pattern.
-                    // println!("found a repeating ID: {id}");
+            // split the digits into equal parts of increasing length
+            // (up to halves) and check for equality for an invalid ID.
+            for pattern_len in 1..=(digits.len() / 2) {
+                let is_divisible = (digits.len() % pattern_len) == 0;
+                if is_divisible && digits.chunks_exact(pattern_len).all_equal() {
                     output += id;
                     break;
                 }
