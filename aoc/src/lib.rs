@@ -13,4 +13,5 @@ pub mod prelude {
     pub use helpers::grid::*;
     pub use helpers::parsing::*;
     pub use itertools::Itertools;
+    pub use rayon::prelude::*;
 }
