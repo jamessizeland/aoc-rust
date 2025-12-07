@@ -67,7 +67,7 @@ pub trait CombineOps {
     fn combine(&self) -> Result<usize>;
 }
 
-impl CombineOps for &(u32, u32) {
+impl CombineOps for (u32, u32) {
     fn combine(&self) -> Result<usize> {
         Ok(format!("{}{}", self.0, self.1).parse()?)
     }
