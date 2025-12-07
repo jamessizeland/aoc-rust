@@ -9,6 +9,7 @@ pub mod prelude {
 
     use super::helpers;
     pub use anyhow::{Result, anyhow};
+    pub use colored::*;
     pub use helpers::file::*;
     pub use helpers::grid::*;
     pub use helpers::parsing::*;
