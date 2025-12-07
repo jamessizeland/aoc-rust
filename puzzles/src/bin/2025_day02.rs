@@ -25,12 +25,12 @@ fn part_a(input: &Input) -> Result<usize> {
     let ranges = parse_ranges(lines[0])?;
     for range in ranges {
         for id in range {
-            let id_chars = id.to_string().chars().collect_vec();
-            if id_chars.first().is_some_and(|c| c == &'0') {
+            let digits = id.to_string().chars().collect_vec();
+            if digits.first().is_some_and(|c| c == &'0') {
                 output += id;
                 break;
             }
-            let (first, second) = id_chars.split_at(id_chars.len() / 2);
+            let (first, second) = digits.split_at(digits.len() / 2);
             if first == second {
                 output += id;
             }
@@ -40,8 +40,28 @@ fn part_a(input: &Input) -> Result<usize> {
 }
 #[allow(unused)]
 fn part_b(input: &Input) -> Result<usize> {
+    let mut output = 0;
     let lines = input.lines().collect_vec();
-    let output = lines.len();
+    assert!(lines.len() == 1);
+    let ranges = parse_ranges(lines[0])?;
+    for range in ranges {
+        for id in range {
+            let digits = id.to_string().chars().collect_vec();
+            if digits.first().is_some_and(|c| c == &'0') {
+                output += id;
+                break;
+            }
+            // we need to check each digit against its next neighbour until it is a pattern
+            // or we hit the end.
+
+            for digit in &digits {
+                if let Some(check) = digits.get(pattern.len()..pattern.len() * 2) {
+                    println!("checking against next {} digits: '{check:?}'", check.len());
+                    if pattern == check.as_ref() {}
+                }
+            }
+        }
+    }
     Ok(output)
 }
 fn main() {
