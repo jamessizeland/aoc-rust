@@ -16,11 +16,11 @@ fn part_b(input: &Input) -> Result<usize> {
     Ok(output)
 }
 fn main() {
-    let input = Input::from_puzzle();
+    let input = &Input::from_puzzle();
     #[cfg(feature = "a")]
-    println!("part a: {}", part_a(& input).unwrap());
+    println!("part a: {}", part_a(input).unwrap());
     #[cfg(feature = "b")]
-    println!("part b: {}", part_b(& input).unwrap());
+    println!("part b: {}", part_b(input).unwrap());
 }
 #[cfg(test)]
 mod test {
