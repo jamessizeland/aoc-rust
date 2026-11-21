@@ -204,7 +204,7 @@ mod template {
 
         if !file_path.exists() {
             println!("-> Generating template for {year} {day_str}");
-            let input = extract_example_input(year, day);
+            let example_input = extract_example_input(year, day);
             let part_a_fn = puzzle_function_template("a");
             let part_b_fn = puzzle_function_template("b");
             let part_a_test = puzzle_test_template("a");
@@ -216,16 +216,16 @@ mod template {
                 #[allow(unused)]
                 #part_b_fn
                 fn main() {
-                    let input = Input::from_puzzle();
+                    let input = &Input::from_puzzle();
                     #[cfg(feature = "a")]
-                    println!("part a: {}", part_a(&input).unwrap());
+                    println!("part a: {}", part_a(input).unwrap());
                     #[cfg(feature = "b")]
-                    println!("part b: {}", part_b(&input).unwrap());
+                    println!("part b: {}", part_b(input).unwrap());
                 }
                 #[cfg(test)]
                 mod test {
                     use super::*;
-                    const INPUT: &str = #input;
+                    const INPUT: &str = #example_input;
                     #part_a_test
                     #part_b_test
                 }
