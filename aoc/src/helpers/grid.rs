@@ -1,5 +1,64 @@
+use itertools::Itertools;
 use std::ops::Add;
 
+use crate::{get_puzzle_input, prelude::Inputter};
+
+/// 2D Grid of data points
+pub struct GridInput {
+    lines: Vec<String>,
+    width: usize,
+    height: usize,
+}
+
+impl Inputter for GridInput {
+    fn from_literal(input: &str) -> Self {
+        GridInput::new(input)
+    }
+
+    fn from_puzzle() -> Self {
+        let input = get_puzzle_input();
+        GridInput::new(&input)
+    }
+}
+
+impl GridInput {
+    fn new(input: &str) -> Self {
+        let lines = input.trim().lines().map(|s| s.to_string()).collect_vec();
+        let height = lines.len();
+        let Some(first_line) = lines.first() else {
+            panic!("grid has no height");
+        };
+        let width = first_line.chars().count();
+        Self {
+            lines,
+            width,
+            height,
+        }
+    }
+    /// Get the value at x,y in the puzzle grid, if it is a number.
+    pub fn get_digit(&self, point: &Point) -> Option<u32> {
+        self.get(point).and_then(|val| {
+            println!("val: {val}");
+            val.to_digit(10)
+        })
+    }
+    /// Get the value at x,y in the puzzle grid.
+    pub fn get(&self, point: &Point) -> Option<char> {
+        if point.x > self.width as isize || point.x < 0 {
+            return None;
+        }
+        if point.y > self.height as isize || point.y < 0 {
+            return None;
+        }
+        let Some(line) = self.lines.get(point.y as usize) else {
+            return None;
+        };
+        let mut chars = line.chars();
+        chars.nth(point.x as usize)
+    }
+}
+
+/// Single point within a Grid
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Point {
     pub x: isize,
@@ -53,3 +112,39 @@ pub const UP: Point = Point { x: 0, y: -1 };
 pub const DOWN: Point = Point { x: 0, y: 1 };
 pub const LEFT: Point = Point { x: -1, y: 0 };
 pub const RIGHT: Point = Point { x: 1, y: 0 };
+
+#[cfg(test)]
+mod test {
+    use crate::prelude::*;
+
+    const TEST_INPUT: &str = "abcdefg\nhijklmn\nopqrstu\n1234567";
+
+    #[test]
+    fn grid_dimensions() {
+        let map = GridInput::from_literal(TEST_INPUT);
+        assert_eq!(map.width, 7);
+        assert_eq!(map.height, 4);
+    }
+
+    #[test]
+    fn test_inside_grid_point() {
+        let map = GridInput::from_literal(TEST_INPUT);
+        let point = Point::new(6, 2);
+        let result = map.get(&point);
+        assert_eq!(result, Some('u'))
+    }
+    #[test]
+    fn test_outside_grid_point() {
+        let map = GridInput::from_literal(TEST_INPUT);
+        let point = Point::new(6, -1);
+        let result = map.get(&point);
+        assert_eq!(result, None)
+    }
+    #[test]
+    fn test_parse_grid_point() {
+        let map = GridInput::from_literal(TEST_INPUT);
+        let point = Point::new(2, 3);
+        let result = map.get_digit(&point);
+        assert_eq!(result, Some(3))
+    }
+}
