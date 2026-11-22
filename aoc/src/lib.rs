@@ -17,14 +17,6 @@ pub mod prelude {
     pub use helpers::parsing::*;
     pub use itertools::Itertools;
     pub use rayon::prelude::*;
-    pub trait Inputter {
-        /// Create an input from a literal string.
-        /// Useful for tests.
-        fn from_literal(input: &str) -> Self;
-        /// Create an input from the day's puzzle input.
-        /// This function infers the year and day from the binary name.
-        fn from_puzzle() -> Self;
-    }
 }
 
 pub fn get_puzzle_input() -> String {

@@ -1,27 +1,33 @@
 use std::str::Lines;
 
-use crate::{get_puzzle_input, prelude::Inputter};
+use crate::{get_puzzle_input, helpers::grid::GridInput};
 
 #[derive(Debug)]
 pub struct Input {
     text: String,
 }
 
-impl Inputter for Input {
-    fn from_literal(input: &str) -> Self {
+impl Input {
+    /// Create an input from a literal string.
+    /// Useful for tests.
+    pub fn from_literal(input: &str) -> Self {
         let text = input.trim().to_string();
         Self { text }
     }
 
     /// Create an input from the day's puzzle input.
     /// This function infers the year and day from the binary name.
-    fn from_puzzle() -> Self {
+    pub fn from_puzzle() -> Self {
         let text = get_puzzle_input();
         Self { text }
     }
 }
 
 impl Input {
+    /// Convert this input to a GridInput
+    pub fn to_grid(&self) -> GridInput {
+        GridInput::new(&self.text)
+    }
     /// Return the input line by line
     pub fn lines(&self) -> Lines<'_> {
         self.text.lines()
