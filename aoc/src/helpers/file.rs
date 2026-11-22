@@ -1,27 +1,35 @@
 use std::str::Lines;
 
-use crate::{get_puzzle_input, prelude::Inputter};
+use itertools::Itertools as _;
+
+use crate::helpers::grid::GridInput;
 
 #[derive(Debug)]
 pub struct Input {
     text: String,
 }
 
-impl Inputter for Input {
-    fn from_literal(input: &str) -> Self {
+impl Input {
+    /// Create an input from a literal string.
+    /// Useful for tests.
+    pub fn from_literal(input: &str) -> Self {
         let text = input.trim().to_string();
         Self { text }
     }
 
     /// Create an input from the day's puzzle input.
     /// This function infers the year and day from the binary name.
-    fn from_puzzle() -> Self {
+    pub fn from_puzzle() -> Self {
         let text = get_puzzle_input();
         Self { text }
     }
 }
 
 impl Input {
+    /// Convert this input to a GridInput
+    pub fn to_grid(&self) -> GridInput {
+        GridInput::new(&self.text)
+    }
     /// Return the input line by line
     pub fn lines(&self) -> Lines<'_> {
         self.text.lines()
@@ -45,4 +53,18 @@ impl Input {
             .map(|l| l.parse().expect("Failed to parse line"))
             .collect()
     }
+}
+
+fn get_puzzle_input() -> String {
+    let exe_path = std::env::current_exe().expect("Failed to get current executable path");
+    let bin_name = exe_path.file_stem().expect("not a file").to_str().unwrap();
+    let (year, day) = bin_name
+        .split("_day")
+        .collect_tuple()
+        .expect("puzzle input name should be YYYY_dayDD");
+    let input_path = format!("puzzles/input/{year}/day{day}/input.aoc");
+    std::fs::read_to_string(&input_path)
+        .expect("file should be a string")
+        .trim()
+        .to_string()
 }

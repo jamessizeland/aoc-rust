@@ -1,7 +1,5 @@
 use itertools::Itertools;
-use std::ops::Add;
-
-use crate::{get_puzzle_input, prelude::Inputter};
+use std::{fmt::Display, ops::Add};
 
 /// 2D Grid of data points
 pub struct GridInput {
@@ -10,19 +8,17 @@ pub struct GridInput {
     height: usize,
 }
 
-impl Inputter for GridInput {
-    fn from_literal(input: &str) -> Self {
-        GridInput::new(input)
-    }
-
-    fn from_puzzle() -> Self {
-        let input = get_puzzle_input();
-        GridInput::new(&input)
+impl Display for GridInput {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for line in &self.lines {
+            writeln!(f, "{}", line)?;
+        }
+        Ok(())
     }
 }
 
 impl GridInput {
-    fn new(input: &str) -> Self {
+    pub(crate) fn new(input: &str) -> Self {
         let lines = input.trim().lines().map(|s| s.to_string()).collect_vec();
         let height = lines.len();
         let Some(first_line) = lines.first() else {
@@ -121,28 +117,28 @@ mod test {
 
     #[test]
     fn grid_dimensions() {
-        let map = GridInput::from_literal(TEST_INPUT);
+        let map = Input::from_literal(TEST_INPUT).to_grid();
         assert_eq!(map.width, 7);
         assert_eq!(map.height, 4);
     }
 
     #[test]
     fn test_inside_grid_point() {
-        let map = GridInput::from_literal(TEST_INPUT);
+        let map = Input::from_literal(TEST_INPUT).to_grid();
         let point = Point::new(6, 2);
         let result = map.get(&point);
         assert_eq!(result, Some('u'))
     }
     #[test]
     fn test_outside_grid_point() {
-        let map = GridInput::from_literal(TEST_INPUT);
+        let map = Input::from_literal(TEST_INPUT).to_grid();
         let point = Point::new(6, -1);
         let result = map.get(&point);
         assert_eq!(result, None)
     }
     #[test]
     fn test_parse_grid_point() {
-        let map = GridInput::from_literal(TEST_INPUT);
+        let map = Input::from_literal(TEST_INPUT).to_grid();
         let point = Point::new(2, 3);
         let result = map.get_digit(&point);
         assert_eq!(result, Some(3))
