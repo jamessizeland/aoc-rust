@@ -1,36 +1,27 @@
-use itertools::Itertools;
 use std::str::Lines;
+
+use crate::{get_puzzle_input, prelude::Inputter};
 
 #[derive(Debug)]
 pub struct Input {
     text: String,
 }
 
-impl Input {
-    /// Create an input from a literal string.
-    /// Useful for tests.
-    pub fn from_literal(input: &str) -> Input {
+impl Inputter for Input {
+    fn from_literal(input: &str) -> Self {
         let text = input.trim().to_string();
-        Input { text }
+        Self { text }
     }
 
     /// Create an input from the day's puzzle input.
     /// This function infers the year and day from the binary name.
-    pub fn from_puzzle() -> Input {
-        let exe_path = std::env::current_exe().expect("Failed to get current executable path");
-        let bin_name = exe_path.file_stem().expect("not a file").to_str().unwrap();
-        let (year, day) = bin_name
-            .split("_day")
-            .collect_tuple()
-            .expect("puzzle input name should be YYYY_dayDD");
-        let input_path = format!("puzzles/input/{year}/day{day}/input.aoc");
-        let text = std::fs::read_to_string(&input_path)
-            .expect("file should be a string")
-            .trim()
-            .to_string();
-        Input { text }
+    fn from_puzzle() -> Self {
+        let text = get_puzzle_input();
+        Self { text }
     }
+}
 
+impl Input {
     /// Return the input line by line
     pub fn lines(&self) -> Lines<'_> {
         self.text.lines()
