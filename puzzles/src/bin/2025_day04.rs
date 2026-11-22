@@ -2,9 +2,7 @@ use aoc::prelude::*;
 #[allow(unused)]
 fn part_a(input: &Input) -> Result<usize> {
     let mut output = 0;
-    for line in input.lines() {
-        println!("{}", line);
-    }
+    let map = input.to_grid();
     Ok(output)
 }
 #[allow(unused)]
@@ -30,7 +28,7 @@ mod test {
     fn test_part_a() {
         let input = Input::from_literal(INPUT);
         let result = part_a(&input).unwrap();
-        assert_eq!(result, 0);
+        assert_eq!(result, 13);
         todo!("set up test");
     }
     #[test]
