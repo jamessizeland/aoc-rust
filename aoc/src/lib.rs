@@ -17,6 +17,28 @@ pub mod prelude {
     pub use helpers::parsing::*;
     pub use itertools::Itertools;
     pub use rayon::prelude::*;
+    pub trait Inputter {
+        /// Create an input from a literal string.
+        /// Useful for tests.
+        fn from_literal(input: &str) -> Self;
+        /// Create an input from the day's puzzle input.
+        /// This function infers the year and day from the binary name.
+        fn from_puzzle() -> Self;
+    }
+}
+
+pub fn get_puzzle_input() -> String {
+    let exe_path = std::env::current_exe().expect("Failed to get current executable path");
+    let bin_name = exe_path.file_stem().expect("not a file").to_str().unwrap();
+    let (year, day) = bin_name
+        .split("_day")
+        .collect_tuple()
+        .expect("puzzle input name should be YYYY_dayDD");
+    let input_path = format!("puzzles/input/{year}/day{day}/input.aoc");
+    std::fs::read_to_string(&input_path)
+        .expect("file should be a string")
+        .trim()
+        .to_string()
 }
 
 pub fn get_puzzle_input() -> String {
