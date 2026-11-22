@@ -6,6 +6,7 @@ pub struct GridInput {
     lines: Vec<String>,
     width: usize,
     height: usize,
+    highlighted: Vec<Point>,
 }
 
 impl Display for GridInput {
@@ -29,17 +30,34 @@ impl GridInput {
             lines,
             width,
             height,
+            highlighted: Vec::new(),
         }
     }
+    /// Mark a data point for highlighting later
+    pub fn mark(&mut self, point: Point) {
+        self.highlighted.push(point);
+    }
+    /// Get the height of the puzzle grid
+    pub fn height(&self) -> usize {
+        self.height
+    }
+    /// Get the width of the puzzle grid
+    pub fn width(&self) -> usize {
+        self.width
+    }
+    /// Iterate through all data points in the puzzle grid
+    pub fn iter(&self) -> impl Iterator<Item = char> + '_ {
+        self.lines.iter().flat_map(|row| row.chars())
+    }
     /// Get the value at x,y in the puzzle grid, if it is a number.
-    pub fn get_digit(&self, point: &Point) -> Option<u32> {
+    pub fn get_digit(&self, point: Point) -> Option<u32> {
         self.get(point).and_then(|val| {
             println!("val: {val}");
             val.to_digit(10)
         })
     }
     /// Get the value at x,y in the puzzle grid.
-    pub fn get(&self, point: &Point) -> Option<char> {
+    pub fn get(&self, point: Point) -> Option<char> {
         if point.x > self.width as isize || point.x < 0 {
             return None;
         }
@@ -55,24 +73,31 @@ impl GridInput {
 }
 
 /// Single point within a Grid
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub struct Point {
     pub x: isize,
     pub y: isize,
 }
 
 impl Point {
-    pub fn new(x: isize, y: isize) -> Self {
+    pub fn new(x: usize, y: usize) -> Self {
+        Self {
+            x: x as isize,
+            y: y as isize,
+        }
+    }
+
+    pub fn vector(x: isize, y: isize) -> Self {
         Self { x, y }
     }
 
     /// Returns the 4 cardinal neighbors (Up, Down, Left, Right)
     pub fn neighbors(&self) -> Vec<Point> {
         vec![
-            Point::new(self.x, self.y - 1), // Up
-            Point::new(self.x, self.y + 1), // Down
-            Point::new(self.x - 1, self.y), // Left
-            Point::new(self.x + 1, self.y), // Right
+            Point::vector(self.x, self.y - 1), // Up
+            Point::vector(self.x, self.y + 1), // Down
+            Point::vector(self.x - 1, self.y), // Left
+            Point::vector(self.x + 1, self.y), // Right
         ]
     }
 
@@ -84,7 +109,7 @@ impl Point {
                 if dx == 0 && dy == 0 {
                     continue;
                 }
-                points.push(Point::new(self.x + dx, self.y + dy));
+                points.push(Point::vector(self.x + dx, self.y + dy));
             }
         }
         points
@@ -126,21 +151,21 @@ mod test {
     fn test_inside_grid_point() {
         let map = Input::from_literal(TEST_INPUT).to_grid();
         let point = Point::new(6, 2);
-        let result = map.get(&point);
+        let result = map.get(point);
         assert_eq!(result, Some('u'))
     }
     #[test]
     fn test_outside_grid_point() {
         let map = Input::from_literal(TEST_INPUT).to_grid();
-        let point = Point::new(6, -1);
-        let result = map.get(&point);
+        let point = Point::new(6, 99);
+        let result = map.get(point);
         assert_eq!(result, None)
     }
     #[test]
     fn test_parse_grid_point() {
         let map = Input::from_literal(TEST_INPUT).to_grid();
         let point = Point::new(2, 3);
-        let result = map.get_digit(&point);
+        let result = map.get_digit(point);
         assert_eq!(result, Some(3))
     }
 }
