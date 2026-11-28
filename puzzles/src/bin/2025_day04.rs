@@ -3,27 +3,25 @@ use aoc::prelude::*;
 fn part_a(input: &Input) -> Result<usize> {
     let mut output = 0;
     let map = input.to_grid();
-    for x in 0..map.width() {
-        for y in 0..map.height() {
-            let mut num_rolls = 0;
-            let point = Point::new(x, y);
-            if map.get(point) != Some('@') {
-                continue; // only count if this is a roll space
-            };
-            let neighbours = point.neighbors_extended();
-            for neighbour in neighbours {
-                if map.get(neighbour) == Some('@') {
-                    num_rolls += 1;
-                }
-                if num_rolls > 4 {
-                    break; // too many rolls adjacent
-                }
+    for (point, value) in map.iter() {
+        if value != '@' {
+            continue; // only count if this is a roll space
+        }
+        let mut num_rolls = 0;
+        for (_, value) in map.neighbours_extended(point) {
+            if value == '@' {
+                num_rolls += 1;
             }
-            if num_rolls <= 4 {
-                output += 1;
+            if num_rolls >= 4 {
+                break; // too many rolls
             }
         }
+        if num_rolls < 4 {
+            map.mark(point);
+            output += 1;
+        }
     }
+    println!("{map}");
     Ok(output)
 }
 #[allow(unused)]
@@ -50,7 +48,6 @@ mod test {
         let input = Input::from_literal(INPUT);
         let result = part_a(&input).unwrap();
         assert_eq!(result, 13);
-        todo!("set up test");
     }
     #[test]
     fn test_part_b() {
