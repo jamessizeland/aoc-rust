@@ -4,6 +4,7 @@ mod helpers {
     pub mod file;
     pub mod grid;
     pub mod parsing;
+    pub mod point;
 }
 
 pub mod prelude {
@@ -15,6 +16,7 @@ pub mod prelude {
     pub use helpers::file::*;
     pub use helpers::grid::*;
     pub use helpers::parsing::*;
+    pub use helpers::point::*;
     pub use itertools::Itertools;
     pub use rayon::prelude::*;
     pub trait Inputter {
